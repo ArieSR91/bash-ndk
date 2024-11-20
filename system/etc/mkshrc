@@ -1,0 +1,46 @@
+# Copyright (c) 2024
+#	Arie-SR91 <syahri.ramadhan2022@gmail.com>
+# This file is provided under the same terms as mksh.
+#-
+# Kali linux mkshrc for Android
+
+: ${TERM:=xterm-256color} ${MKSH:=/system/bin/sh} ${HOSTNAME:=$(hostname)}
+: ${SHELL:=$MKSH}
+
+if [ "$(whoami)" == "root" ]; then # root user
+    prompt_symbol=💀
+    PS1=$'\a\r\a\e[;94m\a┌──(\a\e[1;31m\a${USER:=$(ulimit -c 0; \                                
+        id -un 2>/dev/null || echo \?)}$prompt_symbol${HOSTNAME%%.*}\a\e[;94m\a)-[\a\e[0m\a$(            
+            local d=${PWD:-?} p=~            
+            [[ $p = ?(*/) ]] || d=${d/#$p/~} 
+            print -nr -- "$d"                                                      
+        )\a\e[;94m\a]\n└─\a\e[1;31m\a#\a\e[0m\a '
+else
+    prompt_symbol=㉿
+    PS1=$'\a\r\a\e[;32m\a┌──(\a\e[1;34m\a${USER:=$(ulimit -c 0; \                                
+        id -un 2>/dev/null || echo \?)}$prompt_symbol${HOSTNAME%%.*}\a\e[;32m\a)-[\a\e[0m\a$(            
+            local d=${PWD:-?} p=~            
+            [[ $p = ?(*/) ]] || d=${d/#$p/~} 
+            print -nr -- "$d"                                                      
+        )\a\e[;32m\a]\n└─\a\e[1;34m\a$\a\e[0m\a '
+fi
+
+if [ -d "/sbin/.magisk/busybox" ]; then
+  BBDIR="/sbin/.magisk/busybox"
+elif [ -d "/sbin/.core/busybox" ]; then
+  BBDIR="/sbin/.core/busybox"
+fi
+PATH=$PATH:/sbin:$BBDIR:.
+export TERM MKSH HOSTNAME SHELL USER PATH
+# Place your own aliases in /sdcard/.aliases for ease.
+
+for p in ~/.bin; do
+	[[ -d $p/. ]] || continue
+	[[ :$PATH: = *:$p:* ]] || PATH=$p:$PATH
+done
+
+unset p
+
+if [ -f "/sdcard/.bash_aliases" ]; then
+  . "/sdcard/.bash_aliases"
+fi
