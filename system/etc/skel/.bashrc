@@ -14,7 +14,7 @@ shopt -s checkwinsize
 
 case "$TERM" in
     xterm-color|*-256color) color_prompt=yes;;
-fi
+esac
 
 if [ "$EUID" -eq 0 ]; then
     prompt_color='\[\033[;94m\]'
