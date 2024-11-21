@@ -3,7 +3,9 @@
 Bash shell for android
 
 > [+] bash shell (/bin/bash)
+
 > [+] kali linux style mkshrc
+
 > [+] kali linux style bashrc
 ![image](./.images/images.jpg)
 Note:
