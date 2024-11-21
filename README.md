@@ -3,6 +3,7 @@
 Bash shell for android
 
 - bash shell (/bin/bash)
+- modified mkshrc (/etc/mkshrc)
 - kali linux style mkshrc
 - kali linux style bashrc
 
