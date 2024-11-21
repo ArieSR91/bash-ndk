@@ -7,7 +7,6 @@ Bash shell for android
 - kali linux style bashrc
 
 ![image](./.images/images.jpg)
----
+
 Note:
 > If you in bash shell, just copy /sdcard/.bashrc to your HOME folder
----
