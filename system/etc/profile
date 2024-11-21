@@ -11,8 +11,10 @@ if [ "$(id -u)" -eq 0 ]; then
     if [ ! -d $HOME ]; then
         mkdir $HOME
     fi
+    cd $HOME
 else
     export HOME=/sdcard
+    cd $HOME
 fi
 # Source etc/bash.bashrc and ~/.bashrc also for interactive bash login shells:
 if [ "$BASH" ]; then
