@@ -17,6 +17,8 @@ sed -i "s|<SDCARD>|$SDCARD|g" $MODPATH/system/etc/mkshrc
 #sed -i "s|<BIN>|$BIN|g" $MODPATH/custom/.bashrc
 
 set_perm 0 0 755 $MODPATH/system/bin/bash
+set_perm 0 0 755 $MODPATH/system/etc/profile
+set_perm 0 0 755 $MODPATH/system/etc/profile.d
 set_perm 0 0 755 $MODPATH/system/etc/bash.bashrc
 
 if [ ! -f $SDCARD/.bash_aliases ]; then

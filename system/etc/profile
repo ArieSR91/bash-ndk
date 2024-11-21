@@ -1,0 +1,27 @@
+for i in /etc/profile.d/*.sh; do
+	if [ -r $i ]; then
+		. $i
+	fi
+done
+unset i
+export SHELL=/bin/bash
+
+if [ "$(id -u)" -eq 0 ]; then
+    export HOME=/data/local/root
+    if [ ! -d $HOME ]; then
+        mkdir $HOME
+    fi
+else
+    export HOME=/sdcard
+fi
+# Source etc/bash.bashrc and ~/.bashrc also for interactive bash login shells:
+if [ "$BASH" ]; then
+        if [[ "$-" == *"i"* ]]; then
+                if [ -r /etc/bash.bashrc ]; then
+                        . /etc/bash.bashrc
+                fi
+                if [ -r /sdcard/.bashrc ]; then
+                        . /sdcard/.bashrc
+                fi
+        fi
+fi

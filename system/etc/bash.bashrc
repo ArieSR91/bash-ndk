@@ -78,6 +78,6 @@ fi
 
 PS1=$prompt_color'┌──('$info_color'\u${prompt_symbol}'$info_color'\h'$prompt_color')-['$pwd_color'\w'$prompt_color']\n'$prompt_color'└─'$info_color'\$ '$pwd_color''
 
-if [ -f /sdcard/.aliases ]; then
-    . /sdcard/.aliases
+if [ -f /sdcard/.bash_aliases ]; then
+    . /sdcard/.bash_aliases
 fi
