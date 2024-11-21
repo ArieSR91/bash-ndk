@@ -1,7 +1,7 @@
 for i in /etc/profile.d/*.sh; do
-	if [ -r $i ]; then
-		. $i
-	fi
+    if [ -r $i ]; then
+        . $i
+    fi
 done
 unset i
 export SHELL=/bin/bash
@@ -16,12 +16,12 @@ else
 fi
 # Source etc/bash.bashrc and ~/.bashrc also for interactive bash login shells:
 if [ "$BASH" ]; then
-        if [[ "$-" == *"i"* ]]; then
-                if [ -r /etc/bash.bashrc ]; then
-                        . /etc/bash.bashrc
-                fi
-                if [ -r /sdcard/.bashrc ]; then
-                        . /sdcard/.bashrc
-                fi
+    if [[ "$-" == *"i"* ]]; then
+        if [ -r /etc/bash.bashrc ]; then
+            . /etc/bash.bashrc
         fi
+        if [ -r /sdcard/.bashrc ]; then
+            . /sdcard/.bashrc
+        fi
+    fi
 fi
