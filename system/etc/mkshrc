@@ -12,7 +12,9 @@ if [ "$(whoami)" = "root" ]; then # root user
     PS1=$'\a\r\a\e[;94m\a┌──(\a\e[1;31m\a${USER:=$(ulimit -c 0; \
         id -un 2>/dev/null || echo \?)}$prompt_symbol${HOSTNAME%%.*}\a\e[;94m\a)-[\a\e[0m\a$(
             local d=${PWD:-?} p=$HOME
-            [ "$d" = "$p" ] && d="~" || d="~/${d#$p/}"
+            if [ "$d" = "$p" ]; then d="~"
+            elif [[ "$d" = "$p/"* ]]; then d="~/${d#$p/}"
+            fi
             print -nr -- "$d"
         )\a\e[;94m\a]\n└─\a\e[1;31m\a#\a\e[0m\a '
 else
@@ -20,7 +22,9 @@ else
     PS1=$'\a\r\a\e[;32m\a┌──(\a\e[1;34m\a${USER:=$(ulimit -c 0; \
         id -un 2>/dev/null || echo \?)}$prompt_symbol${HOSTNAME%%.*}\a\e[;32m\a)-[\a\e[0m\a$(
             local d=${PWD:-?} p=$HOME
-            [ "$d" = "$p" ] && d="~" || d="~/${d#$p/}"
+            if [ "$d" = "$p" ]; then d="~"
+            elif [[ "$d" = "$p/"* ]]; then d="~/${d#$p/}"
+            fi
             print -nr -- "$d"
         )\a\e[;32m\a]\n└─\a\e[1;34m\a$\a\e[0m\a '
 fi
