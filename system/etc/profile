@@ -4,26 +4,31 @@ for i in /etc/profile.d/*.sh; do
     fi
 done
 unset i
-export SHELL=/bin/bash
+if [ -n "$BASH_VERSION" ]; then
+    export SHELL=/bin/bash
+fi
 
 if [ "$(id -u)" -eq 0 ]; then
     export HOME=/data/local/root
     if [ ! -d $HOME ]; then
-        mkdir $HOME
+        mkdir -p $HOME
     fi
-    cd $HOME
 else
     export HOME=/sdcard
     cd $HOME
 fi
-# Source etc/bash.bashrc and ~/.bashrc also for interactive bash login shells:
-if [ "$BASH" ]; then
-    if [[ "$-" == *"i"* ]]; then
-        if [ -r /etc/bash.bashrc ]; then
-            . /etc/bash.bashrc
-        fi
-        if [ -r /sdcard/.bashrc ]; then
-            . /sdcard/.bashrc
-        fi
-    fi
+if [ ! -f "$HOME/.bash_aliases" ]; then
+    cp /etc/skel/.bash_aliases $HOME
+fi
+if [ ! -f "$HOME/.bashrc" ]; then
+    cp /etc/skel/.bashrc $HOME
+fi
+
+if [ -n "$BASH" ]; then
+    case "$-" in
+        *i*)
+            if [ -r "/etc/bash.bashrc" ]; then . "/etc/bash.bashrc"; fi
+            if [ -r "$HOME/.bashrc" ]; then . "$HOME/.bashrc"; fi
+            ;;
+    esac
 fi

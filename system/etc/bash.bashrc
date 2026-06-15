@@ -11,6 +11,6 @@ else
     PS1='\u@\h:\w\$ '
 fi
 
-if [ ! -f /sdcard/.bashrc ]; then
-    cp /etc/skel/.bashrc /sdcard/.bashrc
+if [ -f $HOME/.bash_aliases ]; then
+    . $HOME/.bash_aliases
 fi

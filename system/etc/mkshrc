@@ -7,29 +7,42 @@
 : ${TERM:=xterm-256color} ${MKSH:=/system/bin/sh} ${HOSTNAME:=$(hostname)}
 : ${SHELL:=$MKSH}
 
-if [ "$(whoami)" == "root" ]; then # root user
+if [ "$(whoami)" = "root" ]; then # root user
     prompt_symbol=💀
-    PS1=$'\a\r\a\e[;94m\a┌──(\a\e[1;31m\a${USER:=$(ulimit -c 0; \                                
-        id -un 2>/dev/null || echo \?)}$prompt_symbol${HOSTNAME%%.*}\a\e[;94m\a)-[\a\e[0m\a$(            
-            local d=${PWD:-?} p=~            
-            [[ $p = ?(*/) ]] || d=${d/#$p/~} 
-            print -nr -- "$d"                                                      
+    PS1=$'\a\r\a\e[;94m\a┌──(\a\e[1;31m\a${USER:=$(ulimit -c 0; \
+        id -un 2>/dev/null || echo \?)}$prompt_symbol${HOSTNAME%%.*}\a\e[;94m\a)-[\a\e[0m\a$(
+            local d=${PWD:-?} p=$HOME
+            [ "$d" = "$p" ] && d="~" || d="~/${d#$p/}"
+            print -nr -- "$d"
         )\a\e[;94m\a]\n└─\a\e[1;31m\a#\a\e[0m\a '
 else
     prompt_symbol=㉿
-    PS1=$'\a\r\a\e[;32m\a┌──(\a\e[1;34m\a${USER:=$(ulimit -c 0; \                                
-        id -un 2>/dev/null || echo \?)}$prompt_symbol${HOSTNAME%%.*}\a\e[;32m\a)-[\a\e[0m\a$(            
-            local d=${PWD:-?} p=~            
-            [[ $p = ?(*/) ]] || d=${d/#$p/~} 
-            print -nr -- "$d"                                                      
+    PS1=$'\a\r\a\e[;32m\a┌──(\a\e[1;34m\a${USER:=$(ulimit -c 0; \
+        id -un 2>/dev/null || echo \?)}$prompt_symbol${HOSTNAME%%.*}\a\e[;32m\a)-[\a\e[0m\a$(
+            local d=${PWD:-?} p=$HOME
+            [ "$d" = "$p" ] && d="~" || d="~/${d#$p/}"
+            print -nr -- "$d"
         )\a\e[;32m\a]\n└─\a\e[1;34m\a$\a\e[0m\a '
 fi
 
-if [ -d "/sbin/.magisk/busybox" ]; then
-  BBDIR="/sbin/.magisk/busybox"
-elif [ -d "/sbin/.core/busybox" ]; then
-  BBDIR="/sbin/.core/busybox"
-fi
+find_busybox() {
+    local bb
+    for bb in \
+        "/data/adb/magisk/busybox" \
+        "/system/bin/busybox" \
+        "/system/xbin/busybox" \
+        "/system_ext/bin/busybox" \
+        "/vendor/bin/busybox"
+    do
+        if [ -x "$bb" ]; then
+            echo "$bb"
+            return 0
+        fi
+    done
+    return 1
+}
+
+BBDIR=$(find_busybox)
 PATH=$PATH:/sbin:$BBDIR:.
 export TERM MKSH HOSTNAME SHELL USER PATH
 # Place your own aliases in /sdcard/.aliases for ease.
@@ -40,7 +53,9 @@ for p in ~/.bin; do
 done
 
 unset p
-
-if [ -f "/sdcard/.bash_aliases" ]; then
-  . "/sdcard/.bash_aliases"
+if [ -f "/etc/profile" ]; then
+    . "/etc/profile"
+fi
+if [ -f "$HOME/.bash_aliases" ]; then
+    . "$HOME/.bash_aliases"
 fi
